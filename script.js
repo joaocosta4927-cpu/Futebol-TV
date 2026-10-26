@@ -4,16 +4,28 @@ const PASSWORD = "1234";
 
 // Lista fixa de canais.
 // "logo": link de uma imagem do logótipo (se ficar vazio, aparece a inicial do nome)
-// "url": link do stream (.m3u8). Estes são streams de teste públicos e legais.
+// "url": link de um stream (.m3u8) que pode ser reproduzido dentro do site
+// "pagina": em vez de "url", abre a emissão oficial do canal num separador novo
+//           (usado na RTP, que não permite reproduzir o stream noutros sites)
 const canais = [
-  { nome: "RTP1", logo: "
-https://iplayer24.me/bloop/7279c8c1c86b6e270b70e343fc2c2292.m3u8" },
-  { nome: "Canal 2", logo: "", url: "https://cph-p2p-msl.akamaized.net/hls/live/2000341/test/master.m3u8" },
+  // Canais de teste (reproduzem dentro do site e entram no multiview)
+  { nome: "Canal 1", logo: "", url: "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8" },
+  { nome: "Canal 2", logo: "", url: "https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_fmp4/master.m3u8" },
   { nome: "Canal 3", logo: "", url: "https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8" },
-  { nome: "Canal 4", logo: "", url: "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8" }
+  { nome: "Canal 4", logo: "", url: "https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8" },
+  { nome: "Canal 5", logo: "", url: "https://devstreaming-cdn.apple.com/videos/streaming/examples/bipbop_16x9/bipbop_16x9_variant.m3u8" },
+
+  // Canais oficiais (abrem o site do canal num separador novo)
+  { nome: "RTP1", logo: "https://cdn-images.rtp.pt/common/img/channels/logos/color/horizontal/5-372126260903.png?v=3&w=300", pagina: "https://www.rtp.pt/play/direto/rtp1" },
+  { nome: "RTP2", logo: "", pagina: "https://www.rtp.pt/play/direto/rtp2" },
+  { nome: "RTP Notícias", logo: "", pagina: "https://www.rtp.pt/play/direto/rtp3" },
+  { nome: "RTP Desporto", logo: "", pagina: "https://www.rtp.pt/play/direto/rtpdesporto4" },
+  { nome: "Sport TV", logo: "", pagina: "https://www.sporttv.pt" },
+  { nome: "DAZN", logo: "", pagina: "https://www.dazn.com/pt-PT" }
 ];
 
-let canalAtual = 0;
+// Começa no primeiro canal que tenha stream
+let canalAtual = canais.findIndex(c => c.url);
 let multiview = false;
 let players = [];
 
@@ -38,6 +50,17 @@ document.addEventListener("keydown", e => {
 });
 
 // ---------- BARRA DE CANAIS ----------
+// A roda do rato faz a barra andar para os lados
+document.addEventListener("DOMContentLoaded", () => {
+  const barra = document.getElementById("barra");
+  barra.addEventListener("wheel", e => {
+    if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+      e.preventDefault();
+      barra.scrollLeft += e.deltaY;
+    }
+  }, { passive: false });
+});
+
 function criarBarra() {
   const barra = document.getElementById("barra");
   barra.innerHTML = "";
@@ -59,22 +82,23 @@ function criarBarra() {
       div.appendChild(inicial);
     }
 
-    // Nome do canal
+    // Nome do canal (com ↗ se abrir num separador novo)
     const nome = document.createElement("span");
-    nome.textContent = c.nome;
+    nome.textContent = c.pagina ? c.nome + " ↗" : c.nome;
     div.appendChild(nome);
 
-    // Passar o rato: pré-visualização no fundo
-    div.onmouseenter = () => { if (!multiview) mostrarCanal(i); };
-    // Tirar o rato: volta ao canal escolhido
-    div.onmouseleave = () => { if (!multiview) mostrarCanal(canalAtual); };
-    // Clicar: escolhe o canal
-    div.onclick = () => {
-      canalAtual = i;
-      multiview = false;
-      criarBarra();
-      mostrarCanal(i);
-    };
+    if (c.pagina) {
+      // Canal oficial: abre a emissão no site do canal
+      div.onclick = () => window.open(c.pagina, "_blank");
+    } else {
+      // Clicar: muda para este canal
+      div.onclick = () => {
+        canalAtual = i;
+        multiview = false;
+        criarBarra();
+        mostrarCanal(i);
+      };
+    }
 
     barra.appendChild(div);
   });
@@ -121,7 +145,8 @@ function alternarMultiview() {
     const ecra = document.getElementById("ecra");
     ecra.className = "quatro";
     ecra.innerHTML = "";
-    canais.slice(0, 4).forEach(c => ecra.appendChild(criarVideo(c.url)));
+    // Só os canais com stream entram no multiview (até 4)
+    canais.filter(c => c.url).slice(0, 4).forEach(c => ecra.appendChild(criarVideo(c.url)));
     document.getElementById("tituloCanal").textContent = "Multiview";
   } else {
     mostrarCanal(canalAtual);
