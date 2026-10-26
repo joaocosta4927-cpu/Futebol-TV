@@ -6,7 +6,7 @@ const PASSWORD = "1234";
 // "logo": link de uma imagem do logótipo (se ficar vazio, aparece a inicial do nome)
 // "url": link do stream (.m3u8). Estes são streams de teste públicos e legais.
 const canais = [
-  { nome: "Canal 1", logo: "", url: "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8" },
+  { nome: "RTP1", logo: "https://cdn-images.rtp.pt/common/img/channels/logos/color/horizontal/5-372126260903.png?v=3&w=300", url: "https://streaming-live.rtp.pt/liverepeater/smil:rtp1HD.smil/playlist.m3u8?tk=1793073600_1ae5a05425213261f7345a32f7439608b664e934" },
   { nome: "Canal 2", logo: "", url: "https://cph-p2p-msl.akamaized.net/hls/live/2000341/test/master.m3u8" },
   { nome: "Canal 3", logo: "", url: "https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8" },
   { nome: "Canal 4", logo: "", url: "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8" }
