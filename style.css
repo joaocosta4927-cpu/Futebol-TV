@@ -1,0 +1,79 @@
+* { box-sizing: border-box; }
+body {
+  margin: 0; height: 100vh; overflow: hidden; color: white;
+  font-family: -apple-system, "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+  background: radial-gradient(circle at top, #2a2a35, #000);
+}
+.escondido { display: none !important; }
+
+/* Login */
+#login { height: 100vh; display: flex; align-items: center; justify-content: center; }
+.cartao {
+  display: flex; flex-direction: column; gap: 12px; padding: 40px; width: 320px;
+  background: rgba(255,255,255,0.08); backdrop-filter: blur(20px);
+  border-radius: 24px; box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+}
+.cartao h1 { text-align: center; font-weight: 600; margin: 0 0 10px; }
+.cartao input {
+  padding: 14px; border: none; border-radius: 12px;
+  background: rgba(255,255,255,0.12); color: white; font-size: 16px;
+}
+.cartao input::placeholder { color: rgba(255,255,255,0.6); }
+.cartao button, #topo button {
+  padding: 14px; border: none; border-radius: 12px; font-size: 16px;
+  background: white; color: black; font-weight: 600; cursor: pointer;
+  transition: transform .2s;
+}
+.cartao button:hover, #topo button:hover { transform: scale(1.05); }
+#erro { color: #ff6b6b; text-align: center; margin: 0; min-height: 1em; }
+
+/* Vídeo de fundo */
+#ecra { position: fixed; inset: 0; display: grid; gap: 4px; }
+#ecra.um { grid-template-columns: 1fr; }
+#ecra.quatro { grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; }
+#ecra video { width: 100%; height: 100%; object-fit: cover; background: black; }
+#sombra {
+  position: fixed; inset: 0; pointer-events: none;
+  background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 45%),
+              linear-gradient(to bottom, rgba(0,0,0,0.6) 0%, transparent 25%);
+}
+
+/* Topo */
+#topo {
+  position: fixed; top: 0; left: 0; right: 0; padding: 25px 40px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+#topo h2 { margin: 0; font-size: 32px; font-weight: 600; }
+#topo button { padding: 10px 20px; }
+
+/* Barra de canais em baixo */
+#barra {
+  position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+  display: flex; gap: 20px; padding: 20px 30px; max-width: calc(100% - 32px);
+  overflow-x: auto;
+  background: rgba(255,255,255,0.08); backdrop-filter: blur(25px);
+  border-radius: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+}
+.canal {
+  flex: 0 0 150px; height: 100px; border-radius: 22px; cursor: pointer;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
+  background: rgba(255,255,255,0.12);
+  transition: transform .3s ease, box-shadow .3s ease, background .3s;
+}
+.canal img { max-width: 70px; max-height: 40px; object-fit: contain; }
+.canal .inicial { font-size: 28px; font-weight: 700; }
+.canal span { font-size: 14px; opacity: .85; }
+.canal:hover {
+  transform: scale(1.18) translateY(-8px);
+  background: rgba(255,255,255,0.25);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.6), 0 0 0 2px rgba(255,255,255,0.6);
+}
+.canal.ativo { box-shadow: 0 0 0 3px white; }
+
+/* Telemóvel */
+@media (max-width: 600px) {
+  #topo { padding: 16px; }
+  #topo h2 { font-size: 22px; }
+  #barra { bottom: 16px; gap: 12px; padding: 14px 16px; }
+  .canal { flex-basis: 100px; height: 75px; }
+}

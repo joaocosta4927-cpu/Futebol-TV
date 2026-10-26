@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Futebol TV</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Biblioteca que permite reproduzir streams .m3u8 no Chrome/Edge/Firefox -->
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@1"></script>
+</head>
+<body>
+
+  <!-- Ecrã de login -->
+  <div id="login">
+    <div class="cartao">
+      <h1>Futebol TV</h1>
+      <input id="user" type="text" placeholder="Utilizador">
+      <input id="pass" type="password" placeholder="Palavra-passe">
+      <button onclick="entrar()">Entrar</button>
+      <p id="erro"></p>
+    </div>
+  </div>
+
+  <!-- Painel principal (escondido até fazer login) -->
+  <div id="painel" class="escondido">
+    <!-- Vídeo(s) em ecrã inteiro -->
+    <div id="ecra" class="um"></div>
+    <!-- Sombra para o texto e a barra se lerem bem por cima do vídeo -->
+    <div id="sombra"></div>
+
+    <!-- Topo: nome do canal e botão Multiview -->
+    <div id="topo">
+      <h2 id="tituloCanal"></h2>
+      <button onclick="alternarMultiview()">Multiview</button>
+    </div>
+
+    <!-- Barra de canais em baixo -->
+    <div id="barra"></div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
